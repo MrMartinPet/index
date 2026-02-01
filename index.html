@@ -1,289 +1,378 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Frekvensanalys – Lagledare</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" />
-<style>
-  :root{
-    --bg:#f6f7fb; --card:#fff; --border:#e6e8ef; --text:#111827; --muted:#6b7280; --accent:#3a6ff8;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-  html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .wrap{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
-  .topbar{position:sticky;top:0;z-index:5;background:linear-gradient(#fff,rgba(255,255,255,.85));border-bottom:1px solid var(--border);backdrop-filter:saturate(1.2) blur(6px);}
-  .topbar .inner{padding:12px 14px}
-  h1{margin:0;font-size:18px}
-  .chip{display:inline-block;margin-top:6px;padding:6px 10px;border-radius:999px;background:#eef2ff;font-weight:600;font-size:12px}
-
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.04);padding:12px;margin:12px 14px}
-  .row{display:flex;gap:10px}
-  .col{flex:1}
-  input,select{width:100%;padding:14px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;font-size:16px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:14px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;font-size:16px}
-  .btn.secondary{background:#111827}
-  .btn.ghost{background:#e5e7eb;color:#111827}
-  .btn.small{padding:10px 12px;font-size:14px}
-  .sectionTitle{font-weight:800;font-size:15px;margin:8px 14px}
-
-  details{border:1px solid var(--border);border-radius:16px;overflow:hidden;margin:10px 14px}
-  summary{list-style:none;padding:14px 16px;font-weight:800}
-  summary::-webkit-details-marker{display:none}
-  .subTitle{padding:8px 16px;font-weight:700;color:#111}
-  .rowLine{display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid var(--border)}
-  .rowLine input{flex:1}
-  .addRow{padding:12px 14px;border-top:1px dashed var(--border);display:flex;gap:8px}
-
-  /* Analysis view */
-  .nowBar{display:grid;grid-template-columns:1fr 120px;gap:10px}
-  .pill{background:#6b7280;color:#fff;border-radius:16px;padding:18px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;font-weight:800;min-height:76px}
-  .timer{background:#374151;color:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
-  .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-  .list{display:flex;flex-direction:column;gap:8px}
-  .rowBtn{display:grid;grid-template-columns:1fr 100px;gap:10px;align-items:center}
-  .btnAct{padding:14px;border:none;border-radius:12px;background:#f5e1bf;font-weight:800;font-size:16px;text-align:left}
-  .badge{padding:12px;border-radius:12px;background:#f1f5f9;text-align:center;font-weight:800}
-  .fab{position:fixed;inset:auto 16px 16px auto;width:56px;height:56px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 28px rgba(58,111,248,.35)}
-  canvas{max-width:100%}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kinesiskt zodiak – djur, sort och betydelse</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --muted:#a8b3cf;
+      --text:#e8eeff;
+      --accent:#6ea8ff;
+      --border:rgba(255,255,255,.10);
+      --ok:#7CFFB2;
+      --bad:#ff7c7c;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:radial-gradient(1200px 800px at 20% 0%, rgba(110,168,255,.20), transparent 60%),
+                 radial-gradient(900px 700px at 80% 10%, rgba(124,255,178,.10), transparent 55%),
+                 var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:900px; margin:0 auto; padding:18px 16px 40px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      backdrop-filter: blur(6px);
+    }
+    h1{font-size:20px; margin:0 0 10px}
+    p{margin:8px 0; color:var(--muted); line-height:1.35}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-top:10px}
+    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    input[type="date"]{
+      width:240px; padding:10px 12px; border-radius:12px;
+      border:1px solid var(--border); background:rgba(0,0,0,.15); color:var(--text);
+      outline:none;
+    }
+    button{
+      padding:10px 14px; border-radius:12px; border:1px solid var(--border);
+      background:rgba(110,168,255,.18); color:var(--text);
+      cursor:pointer; font-weight:600;
+    }
+    button:active{transform:translateY(1px)}
+    .grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px}
+    @media (min-width:820px){ .grid{grid-template-columns:1.1fr .9fr} }
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--border); background:rgba(0,0,0,.14);
+      color:var(--text); font-size:13px;
+    }
+    .pill b{color:var(--accent)}
+    .kvs{display:grid; grid-template-columns:1fr; gap:8px}
+    .kv{
+      padding:10px 12px; border-radius:12px;
+      border:1px solid var(--border); background:rgba(0,0,0,.12);
+    }
+    .kv .k{font-size:12px; color:var(--muted)}
+    .kv .v{margin-top:4px; font-size:15px; font-weight:650}
+    .note{
+      margin-top:12px; font-size:12px; color:var(--muted);
+      border-left:3px solid rgba(110,168,255,.5); padding-left:10px;
+    }
+    .warn{color:var(--bad)}
+    .ok{color:var(--ok)}
+    .small{font-size:12px}
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar"><div class="inner">
-    <h1>Frekvensanalys</h1>
-    <div id="sessionChip" class="chip" hidden></div>
-  </div></div>
-
-  <!-- SETUP -->
-  <section id="setup">
+  <div class="wrap">
     <div class="card">
+      <h1>Kinesiskt zodiak: djur, “sort” (element + yin/yang) och betydelse</h1>
+      <p>Skriv in födelsedatum. Appen avgör zodiakår baserat på datumet för kinesiskt nyår det året (inte 1 januari).</p>
+
       <div class="row">
-        <div class="col"><input id="leader" placeholder="Lagledare"></div>
-        <div class="col"><input id="flow" placeholder="Flöde"></div>
+        <div>
+          <label for="dob">Födelsedatum</label>
+          <input id="dob" type="date" />
+        </div>
+        <button id="calcBtn">Visa mitt zodiak</button>
+        <button id="todayBtn" title="Fyll med dagens datum">Idag</button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <div class="col"><input id="date" type="date"></div>
-        <div class="col"><button class="btn" onclick="startSession()">Starta analys</button></div>
+
+      <div class="grid" style="margin-top:14px;">
+        <div class="card" style="padding:14px;">
+          <div id="headline" class="pill"><b>Resultat</b><span class="small">– fyll i datum</span></div>
+          <div class="kvs" style="margin-top:10px;">
+            <div class="kv">
+              <div class="k">Zodiakdjur</div>
+              <div class="v" id="animalOut">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Sort (yin/yang + element + djur)</div>
+              <div class="v" id="typeOut">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Zodiakår (lunar year)</div>
+              <div class="v" id="yearOut">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Kinesiskt nyår det året</div>
+              <div class="v" id="cnyOut">—</div>
+            </div>
+          </div>
+          <div class="note" id="noteOut">—</div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div class="pill"><b>Betydelse</b><span class="small">– kort, praktiskt</span></div>
+          <div class="kv" style="margin-top:10px;">
+            <div class="k">Djur – typiska drag</div>
+            <div class="v" id="meaningAnimal">—</div>
+          </div>
+          <div class="kv" style="margin-top:10px;">
+            <div class="k">Element – “hur” energin brukar beskrivas</div>
+            <div class="v" id="meaningElement">—</div>
+          </div>
+          <div class="kv" style="margin-top:10px;">
+            <div class="k">Yin/Yang – “stil”</div>
+            <div class="v" id="meaningYinYang">—</div>
+          </div>
+          <p class="note">
+            Obs: Detta är kultur/astrologi, inte vetenskap. Tolkningar varierar mellan källor och regioner.
+          </p>
+        </div>
       </div>
+
+      <p class="note small">
+        Databas för Lunar New Year-datum i appen: år 1800–2100. Om du matar in datum utanför intervallet visas varning.
+      </p>
     </div>
+  </div>
 
-    <div class="sectionTitle">Kategorier, underkategorier & aktiviteter</div>
-    <div id="editor"></div>
-
-    <div class="card">
-      <div class="row">
-        <input id="newCatName" placeholder="Ny kategori">
-        <button class="btn ghost" onclick="addCategory()">Lägg till kategori</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ANALYSIS -->
-  <section id="analysis" hidden>
-    <div class="card">
-      <div class="nowBar">
-        <div class="pill" id="currentAct">–</div>
-        <div class="timer" id="liveTimer">00:00:00</div>
-      </div>
-      <div class="toolbar">
-        <button id="pauseBtn" class="btn ghost" onclick="pauseActivity()">Pausa aktivitet</button>
-        <button class="btn secondary" onclick="finishSession()">Avsluta</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="row" style="gap:8px">
-        <input id="adHocName" placeholder="Lägg till aktivitet…">
-        <select id="adHocCat" onchange="fillSubSelect()"></select>
-        <select id="adHocSub"></select>
-        <button class="btn small" style="width:auto" onclick="addActivityDynamic()">+ Lägg till</button>
-      </div>
-    </div>
-
-    <div class="card"><div id="actList" class="list"></div></div>
-    <button class="fab" title="Ny aktivitet" onclick="document.getElementById('adHocName').focus()">＋</button>
-  </section>
-
-  <!-- SUMMARY -->
-  <section id="summary" hidden>
-    <div class="card">
-      <div class="row">
-        <div class="col"><button class="btn ghost" onclick="downloadCSV()">Exportera CSV</button></div>
-        <div class="col"><button class="btn" onclick="window.location.reload()">Ny analys</button></div>
-      </div>
-    </div>
-    <div class="card"><canvas id="pie"></canvas></div>
-    <div class="card"><div id="totals" class="list"></div></div>
-  </section>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// FULL DATASET – kategori -> underkategori -> aktiviteter
-const model = {
-  header:{leader:"",flow:"",date:""},
-  tree:[
-    {name:"Produktionsplanering", color:"#e8f0ff", subs:[
-      {name:"I Monitor", acts:[
-        "Planering formning","Planering borrning","Planering limning","Planering fräsning"]},
-      {name:"Powerapp", acts:["Beställning i app"]},
-      {name:"Excel", acts:["Planering"]},
-      {name:"Överlämning", acts:["Förberedelse av Överlämning"]}
-    ]},
-    {name:"Möten", color:"#eaf7e8", subs:[
-      {name:"Planerat möte", acts:[
-        "Skiftstartsmöte","Morgomöte","Övrigt möte","Övrig Personalplanering",
-        "Personalplaneringsmöte","Skiftöverlämning","QROC","QRSC"]}
-    ]},
-    {name:"Problem", color:"#fff9db", subs:[
-      {name:"Problemlösning", acts:[
-        "Kvalitetsproblem","Verktygsproblem","Materialproblem","Emballageproblem","Maskinproblem"]}
-    ]},
-    {name:"Logistik", color:"#ffe8d9", subs:[
-      {name:"Från inruta", acts:[
-        "Material till fräslokal","Material till torg","Material till Formning","Verktyg till Limhjul",
-        "Verktyg till Fräslokal","Emballage till Fräslokal","Binge till fräslokal","Övrigt in till flöde"]},
-      {name:"Från Materialtorg", acts:["Material till LH","Material till Fräs"]},
-      {name:"Från Formning", acts:[
-        "Material till Frästorg","Material till Limtorg LH","Material till Limtorg Byrå","Material till utruta","Verktyg till utruta"]},
-      {name:"Från Fräsning", acts:[
-        "Verktyg till Hans","Verktyg till ställage i fräs","Verktyg till utruta","Vinkel till torg",
-        "Material till monteringstorg","Tompall till utruta","Verktyg till bäddfräs (ställage)"]},
-      {name:"Från Limning", acts:[
-        "Verktyg till Laura","Verktyg till vagnsplats golv","Verktyg till utruta","Tompall till utruta",
-        "Överblivet material till utruta","Vinkel till torg"]},
-      {name:"Från Verktygshiss/Vagnsplats", acts:[
-        "Verktyg från Laura till LH","Verktyg från Hans till fräslokal","Verktyg från golvplats till LH"]},
-      {name:"Övrigt", acts:[
-        "Packlåda till fräs","Tompall/vagn till fräs","Tomvagn till fräs","Ingående komponenter","Gång","Rast"]}
-    ]}
-  ],
-  totals:{}, // aktivitet -> sekunder
-  sessionStart:0, sessionRAF:0,
-  active:null, activeStart:0, history:[], paused:false
+/* =========================
+   1) Lunar New Year-datum
+   Källa: tabell “Annual dates of each Lunar New Year 1800–2100”.
+   Vi parsar år + datum ur texten.
+   ========================= */
+
+const LNY_RAW = `
+1800 Jan. 25  1801 Feb. 13  1802 Feb. 3   1803 Jan. 23  1804 Feb. 11  1805 Jan. 31
+1806 Feb. 18  1807 Feb. 7   1808 Jan. 28  1809 Feb. 14  1810 Feb. 4   1811 Jan. 25
+1812 Feb. 13  1813 Feb. 1   1814 Jan. 21  1815 Feb. 9   1816 Jan. 29  1817 Feb. 16
+1818 Feb. 5   1819 Jan. 26  1820 Feb. 14  1821 Feb. 3   1822 Jan. 23  1823 Feb. 11
+1824 Jan. 31  1825 Feb. 18  1826 Feb. 7   1827 Jan. 27  1828 Feb. 15  1829 Feb. 4
+1830 Jan. 25  1831 Feb. 13  1832 Feb. 2   1833 Feb. 20  1834 Feb. 9   1835 Jan. 29
+1836 Feb. 17  1837 Feb. 5   1838 Jan. 26  1839 Feb. 14  1840 Feb. 3   1841 Jan. 23
+1842 Feb. 10  1843 Jan. 30  1844 Feb. 18  1845 Feb. 7   1846 Jan. 27  1847 Feb. 15
+1848 Feb. 5   1849 Jan. 24  1850 Feb. 12  1851 Feb. 1   1852 Feb. 20  1853 Feb. 8
+1854 Jan. 29  1855 Feb. 17  1856 Feb. 6   1857 Jan. 26  1858 Feb. 14  1859 Feb. 3
+1860 Jan. 23  1861 Feb. 10  1862 Jan. 30  1863 Feb. 18  1864 Feb. 8   1865 Jan. 27
+1866 Feb. 15  1867 Feb. 5   1868 Jan. 25  1869 Feb. 11  1870 Jan. 31  1871 Feb. 19
+1872 Feb. 9   1873 Jan. 29  1874 Feb. 17  1875 Feb. 6   1876 Jan. 26  1877 Feb. 13
+1878 Feb. 2   1879 Jan. 22  1880 Feb. 10  1881 Jan. 30  1882 Feb. 18  1883 Feb. 8
+1884 Jan. 28  1885 Feb. 15  1886 Feb. 4   1887 Jan. 24  1888 Feb. 12  1889 Jan. 31
+1890 Jan. 21  1891 Feb. 9   1892 Jan. 30  1893 Feb. 17  1894 Feb. 6   1895 Jan. 26
+1896 Feb. 13  1897 Feb. 2   1898 Jan. 22  1899 Feb. 10  1900 Jan. 31  1901 Feb. 19
+1902 Feb. 8   1903 Jan. 29  1904 Feb. 16  1905 Feb. 4   1906 Jan. 25  1907 Feb. 13
+1908 Feb. 2   1909 Jan. 22  1910 Feb. 10  1911 Jan. 30  1912 Feb. 18  1913 Feb. 6
+1914 Jan. 26  1915 Feb. 14  1916 Feb. 3   1917 Jan. 23  1918 Feb. 11  1919 Feb. 1
+1920 Feb. 20  1921 Feb. 8   1922 Jan. 28  1923 Feb. 16  1924 Feb. 5   1925 Jan. 24
+1926 Feb. 13  1927 Feb. 2   1928 Jan. 23  1929 Feb. 10  1930 Jan. 30  1931 Feb. 17
+1932 Feb. 6   1933 Jan. 26  1934 Feb. 14  1935 Feb. 4   1936 Jan. 24  1937 Feb. 11
+1938 Jan. 31  1939 Feb. 19  1940 Feb. 8   1941 Jan. 27  1942 Feb. 15  1943 Feb. 5
+1944 Jan. 25  1945 Feb. 13  1946 Feb. 2   1947 Jan. 22  1948 Feb. 10  1949 Jan. 29
+1950 Feb. 17  1951 Feb. 6   1952 Jan. 27  1953 Feb. 14  1954 Feb. 3   1955 Jan. 24
+1956 Feb. 12  1957 Jan. 31  1958 Feb. 18  1959 Feb. 8   1960 Jan. 28  1961 Feb. 15
+1962 Feb. 5   1963 Jan. 25  1964 Feb. 13  1965 Feb. 2   1966 Jan. 21  1967 Feb. 9
+1968 Jan. 30  1969 Feb. 17  1970 Feb. 6   1971 Jan. 27  1972 Feb. 15  1973 Feb. 3
+1974 Jan. 23  1975 Feb. 11  1976 Jan. 31  1977 Feb. 18  1978 Feb. 7   1979 Jan. 28
+1980 Feb. 16  1981 Feb. 5   1982 Jan. 25  1983 Feb. 13  1984 Feb. 2   1985 Feb. 20
+1986 Feb. 9   1987 Jan. 29  1988 Feb. 17  1989 Feb. 6   1990 Jan. 27  1991 Feb. 15
+1992 Feb. 4   1993 Jan. 23  1994 Feb. 10  1995 Jan. 31  1996 Feb. 19  1997 Feb. 7
+1998 Jan. 28  1999 Feb. 16  2000 Feb. 5   2001 Jan. 24  2002 Feb. 12  2003 Feb. 1
+2004 Jan. 22  2005 Feb. 9   2006 Jan. 29  2007 Feb. 18  2008 Feb. 7   2009 Jan. 26
+2010 Feb. 14  2011 Feb. 3   2012 Jan. 23  2013 Feb. 10  2014 Jan. 31  2015 Feb. 19
+2016 Feb. 8   2017 Jan. 28  2018 Feb. 16  2019 Feb. 5   2020 Jan. 25  2021 Feb. 12
+2022 Feb. 1   2023 Jan. 22  2024 Feb. 10  2025 Jan. 29  2026 Feb. 17  2027 Feb. 6
+2028 Jan. 26  2029 Feb. 13  2030 Feb. 3   2031 Jan. 23  2032 Feb. 11  2033 Jan. 31
+2034 Feb. 19  2035 Feb. 8   2036 Jan. 28  2037 Feb. 15  2038 Feb. 4   2039 Jan. 24
+2040 Feb. 12  2041 Feb. 1   2042 Jan. 22  2043 Feb. 10  2044 Jan. 30  2045 Feb. 17
+2046 Feb. 6   2047 Jan. 26  2048 Feb. 14  2049 Feb. 2   2050 Jan. 23  2051 Feb. 11
+2052 Feb. 1   2053 Feb. 19  2054 Feb. 8   2055 Jan. 28  2056 Feb. 15  2057 Feb. 4
+2058 Jan. 24  2059 Feb. 12  2060 Feb. 2   2061 Jan. 21  2062 Feb. 9   2063 Jan. 29
+2064 Feb. 17  2065 Feb. 5   2066 Jan. 26  2067 Feb. 14  2068 Feb. 3   2069 Jan. 23
+2070 Feb. 11  2071 Jan. 31  2072 Feb. 19  2073 Feb. 7   2074 Jan. 27  2075 Feb. 15
+2076 Feb. 5   2077 Jan. 24  2078 Feb. 12  2079 Feb. 2   2080 Jan. 22  2081 Feb. 9
+2082 Jan. 29  2083 Feb. 17  2084 Feb. 6   2085 Jan. 26  2086 Feb. 14  2087 Feb. 3
+2088 Jan. 24  2089 Feb. 10  2090 Jan. 30  2091 Feb. 18  2092 Feb. 7   2093 Jan. 27
+2094 Feb. 15  2095 Feb. 5   2096 Jan. 25  2097 Feb. 12  2098 Feb. 1   2099 Jan. 21
+2100 Feb. 9
+`.trim();
+
+const MONTHS = {
+  "Jan.": 1,
+  "Feb.": 2
 };
 
-// =========== SETUP EDITOR ==========
-function renderEditor(){
-  const host = document.getElementById('editor');
-  host.innerHTML='';
-  model.tree.forEach((cat,ci)=>{
-    const d=document.createElement('details');
-    d.style.background=cat.color||'#fff';
-    const s=document.createElement('summary'); s.textContent=cat.name; d.appendChild(s);
-
-    cat.subs.forEach((sub,si)=>{
-      const t=document.createElement('div'); t.className='subTitle'; t.textContent=sub.name; d.appendChild(t);
-      sub.acts.forEach((act,ai)=>{
-        const r=document.createElement('div'); r.className='rowLine';
-        r.innerHTML=`<input value="${act}" onchange="renameAct(${ci},${si},${ai},this.value)">`+
-          `<button class='btn small ghost' style='width:auto' onclick='delAct(${ci},${si},${ai})'>Ta bort</button>`;
-        d.appendChild(r);
-      });
-      const add=document.createElement('div'); add.className='addRow';
-      add.innerHTML=`<input placeholder='Ny aktivitet i ${sub.name}'>`+
-        `<button class='btn small' style='width:auto' onclick='pushAct(${ci},${si}, this.previousElementSibling.value)'>+ Lägg till</button>`;
-      d.appendChild(add);
-    });
-
-    const ren=document.createElement('div'); ren.className='addRow';
-    ren.innerHTML=`<input value='${cat.name}' onchange='renameCat(${ci},this.value)'>`;
-    d.appendChild(ren);
-    host.appendChild(d);
-  });
-  fillCatSelect(); fillSubSelect();
-}
-function addCategory(){ const n=document.getElementById('newCatName').value.trim(); if(!n) return; model.tree.push({name:n,color:'#fff',subs:[]}); document.getElementById('newCatName').value=''; renderEditor(); }
-function renameCat(ci,v){ model.tree[ci].name=v; renderEditor(); }
-function renameAct(ci,si,ai,v){ model.tree[ci].subs[si].acts[ai]=v; renderEditor(); }
-function delAct(ci,si,ai){ model.tree[ci].subs[si].acts.splice(ai,1); renderEditor(); }
-function pushAct(ci,si,name){ if(!name) return; model.tree[ci].subs[si].acts.push(name); renderEditor(); }
-function fillCatSelect(){ const sel=document.getElementById('adHocCat'); sel.innerHTML=model.tree.map((c,i)=>`<option value='${i}'>${c.name}</option>`).join(''); }
-function fillSubSelect(){ const ci=+document.getElementById('adHocCat').value||0; const subSel=document.getElementById('adHocSub'); const subs=model.tree[ci]?.subs||[]; subSel.innerHTML=subs.map((s,i)=>`<option value='${i}'>${s.name}</option>`).join(''); }
-
-// =========== ANALYSIS ==========
-function startSession(){
-  model.header.leader=document.getElementById('leader').value.trim();
-  model.header.flow=document.getElementById('flow').value.trim();
-  model.header.date=document.getElementById('date').value;
-  // Prepare totals for all acts
-  model.tree.forEach(c=>c.subs.forEach(s=>s.acts.forEach(a=>model.totals[a]=0)));
-  model.sessionStart=performance.now();
-  renderActList();
-  document.getElementById('setup').hidden=true; document.getElementById('analysis').hidden=false;
-  const chip=document.getElementById('sessionChip'); chip.hidden=false; chip.textContent=`${model.header.leader||'Lagledare'} · ${model.header.flow||'Flöde'} · ${new Date().toLocaleDateString('sv-SE')}`;
-  tick();
-}
-function renderActList(){
-  const host=document.getElementById('actList'); host.innerHTML='';
-  model.tree.forEach(c=>c.subs.forEach(s=>s.acts.forEach(a=>{
-    const row=document.createElement('div'); row.className='rowBtn';
-    row.innerHTML=`<button class='btnAct' onclick='selectActivity("${a.replaceAll("\"","&quot;")}")'>${a}</button>`+
-                   `<div class='badge' id='sum_${hash(a)}'>00:00:00</div>`;
-    host.appendChild(row);
-  })));
-}
-function addActivityDynamic(){
-  const name=document.getElementById('adHocName').value.trim(); if(!name) return;
-  const ci=+document.getElementById('adHocCat').value||0; const si=+document.getElementById('adHocSub').value||0;
-  const sub=model.tree[ci].subs[si]; sub.acts.push(name); model.totals[name]=0; document.getElementById('adHocName').value=''; renderActList();
-}
-function selectActivity(name){
-  const now=performance.now();
-  if(model.active){
-    const d=(now-model.activeStart)/1000; model.totals[model.active]=(model.totals[model.active]||0)+d; model.history.push({act:model.active,start:model.activeStart,end:now});
+function buildLnyMap() {
+  const map = new Map();
+  const re = /(\d{4})\s+(Jan\.|Feb\.)\s+(\d{1,2})/g;
+  let m;
+  while ((m = re.exec(LNY_RAW)) !== null) {
+    const y = Number(m[1]);
+    const mo = MONTHS[m[2]];
+    const d = Number(m[3]);
+    map.set(y, { y, m: mo, d });
   }
-  model.active=name; model.activeStart=now; model.paused=false;
-  document.getElementById('currentAct').textContent=name; setLive(0);
+  return map;
 }
-function pauseActivity(){
-  if(!model.active) return; const now=performance.now(); const d=(now-model.activeStart)/1000; model.totals[model.active]+=(d>0?d:0); model.history.push({act:model.active,start:model.activeStart,end:now}); model.active=null; model.paused=true; document.getElementById('currentAct').textContent='Pausad'; setLive(0);
-}
-function tick(){
-  // live timer
-  if(model.active){ const d=(performance.now()-model.activeStart)/1000; setLive(d); }
-  // update badges preview (includes current running)
-  const preview={...model.totals}; if(model.active){ preview[model.active]=(preview[model.active]||0)+((performance.now()-model.activeStart)/1000); }
-  for(const [k,v] of Object.entries(preview)){ const el=document.getElementById('sum_'+hash(k)); if(el) el.textContent=fmt(v); }
-  model.sessionRAF=requestAnimationFrame(tick);
-}
-function finishSession(){
-  if(model.active){ const now=performance.now(); const d=(now-model.activeStart)/1000; model.totals[model.active]+=d; model.history.push({act:model.active,start:model.activeStart,end:now}); model.active=null; }
-  cancelAnimationFrame(model.sessionRAF);
-  document.getElementById('analysis').hidden=true; document.getElementById('summary').hidden=false; renderSummary();
+const LNY = buildLnyMap();
+
+/* =========================
+   2) Zodiak: djur + “sort”
+   Sexagenary cycle: stem + branch
+   (year - 4) mod 10/12 ger stem/branch index med 1984 = Jia-Zi (Rat)
+   ========================= */
+
+const ANIMALS = [
+  "Råtta", "Oxe", "Tiger", "Kanin", "Drake", "Orm",
+  "Häst", "Get", "Apa", "Tupp", "Hund", "Gris"
+];
+
+const BRANCH_PINYIN = [
+  "Zi", "Chou", "Yin", "Mao", "Chen", "Si", "Wu", "Wei", "Shen", "You", "Xu", "Hai"
+];
+
+const STEMS = [
+  { p:"Jia",  yinYang:"Yang", element:"Trä"  },
+  { p:"Yi",   yinYang:"Yin",  element:"Trä"  },
+  { p:"Bing", yinYang:"Yang", element:"Eld"  },
+  { p:"Ding", yinYang:"Yin",  element:"Eld"  },
+  { p:"Wu",   yinYang:"Yang", element:"Jord" },
+  { p:"Ji",   yinYang:"Yin",  element:"Jord" },
+  { p:"Geng", yinYang:"Yang", element:"Metall" },
+  { p:"Xin",  yinYang:"Yin",  element:"Metall" },
+  { p:"Ren",  yinYang:"Yang", element:"Vatten" },
+  { p:"Gui",  yinYang:"Yin",  element:"Vatten" }
+];
+
+const MEANING_ANIMAL = {
+  "Råtta": "Snabb, opportunistisk, social. Bra på att hitta vägar runt hinder.",
+  "Oxe": "Stabil, uthållig, metodisk. Bygger resultat över tid.",
+  "Tiger": "Modig, driven, självständig. Tar initiativ och gillar frihet.",
+  "Kanin": "Diplomatisk, mjuk, omtänksam. Undviker onödiga konflikter.",
+  "Drake": "Karismatisk, ambitiös, energisk. Siktar högt och tar plats.",
+  "Orm": "Analytisk, intuitiv, strategisk. Tänker innan den agerar.",
+  "Häst": "Fri, snabb, social. Trivs med tempo och rörelse.",
+  "Get": "Kreativ, lojal, känslig. Stark i samarbete och estetik.",
+  "Apa": "Smart, lekfull, uppfinningsrik. Löser problem kreativt.",
+  "Tupp": "Tydlig, strukturerad, rak. Ser detaljer och gillar ordning.",
+  "Hund": "Lojal, rättvis, beskyddande. Värderar förtroende.",
+  "Gris": "Generös, varm, jordnära. Gillar trygghet och livskvalitet."
+};
+
+const MEANING_ELEMENT = {
+  "Trä": "Tillväxt, utveckling, flexibilitet. Fokus på att bygga och förbättra.",
+  "Eld": "Energi, passion, synlighet. Fokus på driv och momentum.",
+  "Jord": "Stabilitet, realism, förvaltning. Fokus på struktur och helhet.",
+  "Metall": "Precision, disciplin, kvalitet. Fokus på tydlighet och standard.",
+  "Vatten": "Anpassning, flöde, intuition. Fokus på att hitta smartaste vägen."
+};
+
+const MEANING_YY = {
+  "Yang": "Utåtriktad, aktiv, startar saker.",
+  "Yin": "Inåtriktad, mottaglig, förfinar och stabiliserar."
+};
+
+function pad2(n){ return String(n).padStart(2,"0"); }
+
+function toISO(y,m,d){ return `${y}-${pad2(m)}-${pad2(d)}`; }
+
+function parseISODate(s){
+  // Input: "YYYY-MM-DD" (från <input type=date>)
+  const [y,m,d] = s.split("-").map(Number);
+  return { y, m, d, date: new Date(Date.UTC(y, m-1, d)) };
 }
 
-// =========== SUMMARY & EXPORT ==========
-function renderSummary(){
-  const labels=Object.keys(model.totals); const data=labels.map(k=>Math.round(model.totals[k]));
-  new Chart(document.getElementById('pie'),{type:'pie',data:{labels,datasets:[{data}]},options:{plugins:{legend:{position:'bottom'}}}});
-  const list=document.getElementById('totals'); list.innerHTML=labels.filter(l=>model.totals[l]>0).map(l=>`<div class='rowBtn'><div class='btnAct' style='background:#eef2ff'>${l}</div><div class='badge'>${fmt(model.totals[l])}</div></div>`).join('');
-}
-function downloadCSV(){
-  const base=Date.now()-(performance.now()-model.sessionStart);
-  const rows=[["Lagledare",model.header.leader],["Flöde",model.header.flow],["Datum",model.header.date||new Date(base).toLocaleDateString('sv-SE')],["\n"],["Aktivitet","Start","Slut","Sekunder"]];
-  model.history.forEach(h=>{ rows.push([h.act,new Date(base+(h.start-model.sessionStart)).toISOString(),new Date(base+(h.end-model.sessionStart)).toISOString(),((h.end-h.start)/1000|0)]); });
-  rows.push(["\n"],["SUMMA"],...Object.entries(model.totals).map(([k,v])=>[k,'','',Math.round(v)]));
-  const csv=rows.map(r=>r.join(';')).join('\n'); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='frekvensanalys.csv'; a.click();
+function getLunarYearForBirthdate(birth){
+  const lny = LNY.get(birth.y);
+  if(!lny) return { ok:false, reason:`Saknar Lunar New Year-datum för år ${birth.y} (stöder 1800–2100).` };
+
+  const lnyDate = new Date(Date.UTC(lny.y, lny.m-1, lny.d));
+  // Om född före Lunar New Year => tillhör föregående zodiakår
+  const lunarYear = (birth.date < lnyDate) ? (birth.y - 1) : birth.y;
+
+  // Lunar New Year att visa = för birth.y (gränsdatum), men zodiakår kan bli y-1
+  return { ok:true, lunarYear, lnyISO: toISO(lny.y, lny.m, lny.d) };
 }
 
-// =========== HELPERS ==========
-function hash(s){ let h=0; for(let i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return 'h'+Math.abs(h); }
-function fmt(sec){ sec=Math.max(0,sec|0); const h=(''+Math.floor(sec/3600)).padStart(2,'0'); const m=(''+Math.floor((sec%3600)/60)).padStart(2,'0'); const s=(''+(sec%60)).padStart(2,'0'); return `${h}:${m}:${s}`; }
-function setLive(s){ document.getElementById('liveTimer').textContent=fmt(s); }
+function getZodiac(lunarYear){
+  const stemIndex = mod(lunarYear - 4, 10);
+  const branchIndex = mod(lunarYear - 4, 12);
 
-// ====== SAFETY: Warn on exit during active session ======
-window.addEventListener("beforeunload", function (e) {
-  if (document.getElementById('analysis') && !document.getElementById('analysis').hidden) {
-    e.preventDefault();
-    e.returnValue = "Du håller på att avsluta analysen. All tid kan förloras om du lämnar sidan.";
-    return "Du håller på att avsluta analysen. All tid kan förloras om du lämnar sidan.";
+  const stem = STEMS[stemIndex];
+  const animal = ANIMALS[branchIndex];
+  const branch = BRANCH_PINYIN[branchIndex];
+
+  const sort = `${stem.yinYang} ${stem.element} ${animal}`;
+  const ganzhi = `${stem.p}-${branch}`;
+
+  return { lunarYear, stemIndex, branchIndex, stem, animal, branch, sort, ganzhi };
+}
+function mod(a,b){ return ((a % b) + b) % b; }
+
+/* =========================
+   3) UI
+   ========================= */
+
+const $ = (id) => document.getElementById(id);
+
+function setText(id, text){ $(id).textContent = text; }
+
+function renderResult(birthISO){
+  if(!birthISO){
+    setText("headline","Resultat – fyll i datum");
+    setText("animalOut","—");
+    setText("typeOut","—");
+    setText("yearOut","—");
+    setText("cnyOut","—");
+    setText("meaningAnimal","—");
+    setText("meaningElement","—");
+    setText("meaningYinYang","—");
+    setText("noteOut","—");
+    return;
   }
+
+  const birth = parseISODate(birthISO);
+  const ly = getLunarYearForBirthdate(birth);
+
+  if(!ly.ok){
+    setText("headline","Resultat – " + ly.reason);
+    setText("noteOut", ly.reason);
+    return;
+  }
+
+  const z = getZodiac(ly.lunarYear);
+
+  setText("headline", `Resultat – ${birthISO}`);
+  setText("animalOut", `${z.animal} (${z.ganzhi})`);
+  setText("typeOut", z.sort);
+  setText("yearOut", String(z.lunarYear));
+  setText("cnyOut", ly.lnyISO);
+
+  setText("meaningAnimal", MEANING_ANIMAL[z.animal] || "—");
+  setText("meaningElement", MEANING_ELEMENT[z.stem.element] || "—");
+  setText("meaningYinYang", MEANING_YY[z.stem.yinYang] || "—");
+
+  const note =
+    (ly.lunarYear !== birth.y)
+    ? `Du är född före Lunar New Year ${birth.y}. Därför räknas ditt zodiakår som ${ly.lunarYear} (föregående år).`
+    : `Du är född på/efter Lunar New Year ${birth.y}. Därför räknas ditt zodiakår som ${ly.lunarYear}.`;
+
+  setText("noteOut", note);
+}
+
+$("calcBtn").addEventListener("click", () => renderResult($("dob").value));
+$("dob").addEventListener("change", () => renderResult($("dob").value));
+$("todayBtn").addEventListener("click", () => {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = pad2(now.getMonth()+1);
+  const d = pad2(now.getDate());
+  $("dob").value = `${y}-${m}-${d}`;
+  renderResult($("dob").value);
 });
 
-// boot
-renderEditor();
+// Startläge
+renderResult(null);
 </script>
 </body>
 </html>
