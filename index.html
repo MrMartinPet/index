@@ -2,377 +2,311 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Kinesiskt zodiak – djur, sort och betydelse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regelapp – snabbguide</title>
   <style>
-    :root{
-      --bg:#0b1220;
-      --card:#111a2e;
-      --muted:#a8b3cf;
-      --text:#e8eeff;
-      --accent:#6ea8ff;
-      --border:rgba(255,255,255,.10);
-      --ok:#7CFFB2;
-      --bad:#ff7c7c;
-    }
+    :root { --bg:#0b0f14; --card:#121a23; --card2:#0f1620; --txt:#e8eef6; --muted:#a9b6c6; --line:#243142; --accent:#5aa6ff; --bad:#ff5a7a; --good:#49d17d; }
     *{box-sizing:border-box}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:radial-gradient(1200px 800px at 20% 0%, rgba(110,168,255,.20), transparent 60%),
-                 radial-gradient(900px 700px at 80% 10%, rgba(124,255,178,.10), transparent 55%),
-                 var(--bg);
-      color:var(--text);
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0f14,#070a0f);color:var(--txt)}
+    header{position:sticky;top:0;background:rgba(11,15,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 18px}
+    h1{font-size:18px;margin:0 0 8px}
+    .sub{color:var(--muted);font-size:13px;margin:0 0 10px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{border:1px solid var(--line);background:rgba(18,26,35,.7);color:var(--txt);padding:10px 12px;border-radius:12px;font-size:13px;cursor:pointer;user-select:none}
+    .pill[aria-pressed="true"]{border-color:rgba(90,166,255,.7);box-shadow:0 0 0 3px rgba(90,166,255,.15)}
+    .search{flex:1;min-width:190px}
+    input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(18,26,35,.7);color:var(--txt);outline:none}
+    input::placeholder{color:#7f92a8}
+    main{max-width:980px;margin:0 auto;padding:14px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+    .card{grid-column:span 12;background:rgba(18,26,35,.75);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+    .card .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px;background:rgba(15,22,32,.55);cursor:pointer}
+    .card h2{font-size:15px;margin:0}
+    .tag{font-size:12px;color:var(--muted)}
+    .body{display:none;padding:14px;border-top:1px solid var(--line);line-height:1.35}
+    .card.open .body{display:block}
+    .k{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;background:rgba(18,26,35,.55);font-size:12px;color:var(--muted)}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+    .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .tile{background:rgba(15,22,32,.55);border:1px solid var(--line);border-radius:14px;padding:12px}
+    .tile b{display:block;margin-bottom:6px}
+    .note{color:var(--muted);font-size:13px}
+    .ok{color:var(--good)}
+    .bad{color:var(--bad)}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{border:1px solid var(--line);background:rgba(18,26,35,.75);color:var(--txt);padding:10px 12px;border-radius:12px;cursor:pointer}
+    .btn.primary{border-color:rgba(90,166,255,.7);background:rgba(90,166,255,.15)}
+    .small{font-size:12px;color:var(--muted)}
+    @media (min-width:760px){
+      .card.half{grid-column:span 6}
+      .tiles{grid-template-columns:repeat(3,1fr)}
     }
-    .wrap{max-width:900px; margin:0 auto; padding:18px 16px 40px}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
-      backdrop-filter: blur(6px);
-    }
-    h1{font-size:20px; margin:0 0 10px}
-    p{margin:8px 0; color:var(--muted); line-height:1.35}
-    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-top:10px}
-    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
-    input[type="date"]{
-      width:240px; padding:10px 12px; border-radius:12px;
-      border:1px solid var(--border); background:rgba(0,0,0,.15); color:var(--text);
-      outline:none;
-    }
-    button{
-      padding:10px 14px; border-radius:12px; border:1px solid var(--border);
-      background:rgba(110,168,255,.18); color:var(--text);
-      cursor:pointer; font-weight:600;
-    }
-    button:active{transform:translateY(1px)}
-    .grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px}
-    @media (min-width:820px){ .grid{grid-template-columns:1.1fr .9fr} }
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:6px 10px; border-radius:999px;
-      border:1px solid var(--border); background:rgba(0,0,0,.14);
-      color:var(--text); font-size:13px;
-    }
-    .pill b{color:var(--accent)}
-    .kvs{display:grid; grid-template-columns:1fr; gap:8px}
-    .kv{
-      padding:10px 12px; border-radius:12px;
-      border:1px solid var(--border); background:rgba(0,0,0,.12);
-    }
-    .kv .k{font-size:12px; color:var(--muted)}
-    .kv .v{margin-top:4px; font-size:15px; font-weight:650}
-    .note{
-      margin-top:12px; font-size:12px; color:var(--muted);
-      border-left:3px solid rgba(110,168,255,.5); padding-left:10px;
-    }
-    .warn{color:var(--bad)}
-    .ok{color:var(--ok)}
-    .small{font-size:12px}
   </style>
 </head>
 <body>
+<header>
   <div class="wrap">
-    <div class="card">
-      <h1>Kinesiskt zodiak: djur, “sort” (element + yin/yang) och betydelse</h1>
-      <p>Skriv in födelsedatum. Appen avgör zodiakår baserat på datumet för kinesiskt nyår det året (inte 1 januari).</p>
-
-      <div class="row">
-        <div>
-          <label for="dob">Födelsedatum</label>
-          <input id="dob" type="date" />
-        </div>
-        <button id="calcBtn">Visa mitt zodiak</button>
-        <button id="todayBtn" title="Fyll med dagens datum">Idag</button>
-      </div>
-
-      <div class="grid" style="margin-top:14px;">
-        <div class="card" style="padding:14px;">
-          <div id="headline" class="pill"><b>Resultat</b><span class="small">– fyll i datum</span></div>
-          <div class="kvs" style="margin-top:10px;">
-            <div class="kv">
-              <div class="k">Zodiakdjur</div>
-              <div class="v" id="animalOut">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Sort (yin/yang + element + djur)</div>
-              <div class="v" id="typeOut">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Zodiakår (lunar year)</div>
-              <div class="v" id="yearOut">—</div>
-            </div>
-            <div class="kv">
-              <div class="k">Kinesiskt nyår det året</div>
-              <div class="v" id="cnyOut">—</div>
-            </div>
-          </div>
-          <div class="note" id="noteOut">—</div>
-        </div>
-
-        <div class="card" style="padding:14px;">
-          <div class="pill"><b>Betydelse</b><span class="small">– kort, praktiskt</span></div>
-          <div class="kv" style="margin-top:10px;">
-            <div class="k">Djur – typiska drag</div>
-            <div class="v" id="meaningAnimal">—</div>
-          </div>
-          <div class="kv" style="margin-top:10px;">
-            <div class="k">Element – “hur” energin brukar beskrivas</div>
-            <div class="v" id="meaningElement">—</div>
-          </div>
-          <div class="kv" style="margin-top:10px;">
-            <div class="k">Yin/Yang – “stil”</div>
-            <div class="v" id="meaningYinYang">—</div>
-          </div>
-          <p class="note">
-            Obs: Detta är kultur/astrologi, inte vetenskap. Tolkningar varierar mellan källor och regioner.
-          </p>
-        </div>
-      </div>
-
-      <p class="note small">
-        Databas för Lunar New Year-datum i appen: år 1800–2100. Om du matar in datum utanför intervallet visas varning.
-      </p>
+    <h1>Regelapp – snabbguide</h1>
+    <p class="sub">Tryck på sektioner. Sök funkar på allt. Anpassad för 2 spelare + 5 omgångar.</p>
+    <div class="row">
+      <div class="search"><input id="q" placeholder="Sök: chans, järnväg, fängelse, poäng, fri parkering..." /></div>
+      <button class="pill" id="modeAll" aria-pressed="true" data-filter="all">Allt</button>
+      <button class="pill" id="modeTurn" aria-pressed="false" data-filter="turn">Tur (glid)</button>
+      <button class="pill" id="modeScore" aria-pressed="false" data-filter="score">Poäng</button>
+      <button class="pill" id="modeSquares" aria-pressed="false" data-filter="squares">Rutor</button>
     </div>
   </div>
+</header>
+
+<main>
+  <div class="grid" id="cards">
+
+    <section class="card open half" data-tags="turn start omgång turordning">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Starta omgången</h2>
+          <div class="tag">Turordning · 2 spelare</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <div class="tiles">
+          <div class="tile">
+            <b>1) Turordning</b>
+            Titta på <b>referenskortet</b>. Den som står överst börjar.
+          </div>
+          <div class="tile">
+            <b>2) Varje spelare</b>
+            Spelar sina <b>4 pjäser</b> (en i taget).
+          </div>
+          <div class="tile">
+            <b>3) Sen poäng</b>
+            När båda glidit alla pjäser: <b>poängfas i ordning</b>.
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="note"><b>5 omgångar:</b> spela exakt 5, sen räkna slutpengar. Mest vinner.</div>
+      </div>
+    </section>
+
+    <section class="card open half" data-tags="turn glid sikta släpp">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Din tur (glid-regler)</h2>
+          <div class="tag">Gör detta per pjäs</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <div class="tiles">
+          <div class="tile">
+            <b>1) Start</b>
+            Ställ pjäsen <b>bakom GÅ</b>.
+          </div>
+          <div class="tile">
+            <b>2) Glid</b>
+            Sikta och släpp. <span class="bad"><b>Ingen</b> justering efter släpp.</span>
+          </div>
+          <div class="tile">
+            <b>3) Knuff</b>
+            Att knuffa andra pjäser är <span class="ok"><b>tillåtet</b></span>.
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="note"><b>Om pjäsen hamnar mellan rutor:</b> räkna den som rutan där största delen av pjäsen ligger.</div>
+      </div>
+    </section>
+
+    <section class="card" data-tags="score poäng ordning chans järnväg pengar skatt fri parkering">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Poängfas (måste ske i ordning)</h2>
+          <div class="tag">Efter att båda glidit alla 4 pjäser</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <div class="tiles">
+          <div class="tile">
+            <b>Steg 1: Chans</b>
+            Bara pjäser på <b>Chans</b>. Glid igen. Om den hamnar på Chans igen: <b>stanna</b>.
+          </div>
+          <div class="tile">
+            <b>Steg 2: Järnvägsstation</b>
+            Flytta pjäsen till valfri <b>egendom</b> (inte till Chans/Fri parkering/Fängelse).
+          </div>
+          <div class="tile">
+            <b>Steg 3: Pengar & skatt</b>
+            Ta betalt för egendomar. Bonus för färggrupp. Dubbelt om hus. Lyxskatt → betala till Fri parkering.
+          </div>
+          <div class="tile">
+            <b>Steg 4: Fri parkering</b>
+            Flest pjäser där tar potten. Lika → dela.
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="note"><b>Konflikt (båda på samma egendom):</b> referenskortet avgör (den som står högst vinner).</div>
+      </div>
+    </section>
+
+    <section class="card" data-tags="squares rutor gå chans järnväg fängelse lyxskatt fri parkering egendomar">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Vad betyder rutorna?</h2>
+          <div class="tag">Tryck och läs snabbt</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <div class="tiles">
+          <div class="tile">
+            <b>GÅ</b>
+            Startplats för varje glid.
+          </div>
+          <div class="tile">
+            <b>Egendom</b>
+            Ger pengar i poängfasen. Färggrupp ger bonus.
+          </div>
+          <div class="tile">
+            <b>Chans</b>
+            Du får glida igen i poängfasens steg 1.
+          </div>
+          <div class="tile">
+            <b>Järnvägsstation</b>
+            Du flyttar till valfri egendom i poängfasens steg 2.
+          </div>
+          <div class="tile">
+            <b>Lyxskatt</b>
+            Betala (t.ex. 100) till Fri parkering.
+          </div>
+          <div class="tile">
+            <b>Fri parkering</b>
+            Pengapotten. Flest pjäser tar allt.
+          </div>
+          <div class="tile">
+            <b>Fängelse</b>
+            Om du hamnar där: betala 100 till Fri parkering och glid igen – eller sitt kvar till omgångens slut.
+          </div>
+          <div class="tile">
+            <b>Hus</b>
+            Om en egendom har hus: ger <b>dubbla</b> pengar.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card half" data-tags="taktik strategi bästa rutor vinn omgången">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Taktik (5 omgångar)</h2>
+          <div class="tag">Enkelt upplägg</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <div class="tiles">
+          <div class="tile">
+            <b>2 pjäser</b>
+            Sikta på samma <b>färggrupp</b> (bonus är starkt).
+          </div>
+          <div class="tile">
+            <b>1 pjäs</b>
+            Sikta på <b>Järnvägsstation</b> (kontroll).
+          </div>
+          <div class="tile">
+            <b>1 pjäs</b>
+            Använd för <b>sabotage</b> (knuffa bort/knuffa till skatt/fängelse).
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="note"><b>Sista omgången:</b> jaga Fri parkering + stoppa motståndaren (blockera/sabla).</div>
+      </div>
+    </section>
+
+    <section class="card half" data-tags="checklista snabbstart">
+      <div class="hd" role="button" tabindex="0">
+        <div>
+          <h2>Snabbcheck (innan ni börjar)</h2>
+          <div class="tag">30 sekunder</div>
+        </div>
+        <span class="k">Tryck</span>
+      </div>
+      <div class="body">
+        <ul>
+          <li>Bestäm: <b>5 omgångar</b>.</li>
+          <li>Turordning enligt <b>referenskort</b>.</li>
+          <li>Varje tur: glid <b>4 pjäser</b> → sen poängfas.</li>
+          <li>Poängfas: <b>Chans → Järnväg → Pengar/Skatt → Fri parkering</b>.</li>
+        </ul>
+        <div class="btnrow">
+          <button class="btn primary" id="openAll">Öppna alla sektioner</button>
+          <button class="btn" id="closeAll">Stäng alla sektioner</button>
+          <span class="small" id="status"></span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
 
 <script>
-/* =========================
-   1) Lunar New Year-datum
-   Källa: tabell “Annual dates of each Lunar New Year 1800–2100”.
-   Vi parsar år + datum ur texten.
-   ========================= */
+  const cards = [...document.querySelectorAll('.card')];
+  const q = document.getElementById('q');
+  const pills = [...document.querySelectorAll('.pill')];
+  const status = document.getElementById('status');
 
-const LNY_RAW = `
-1800 Jan. 25  1801 Feb. 13  1802 Feb. 3   1803 Jan. 23  1804 Feb. 11  1805 Jan. 31
-1806 Feb. 18  1807 Feb. 7   1808 Jan. 28  1809 Feb. 14  1810 Feb. 4   1811 Jan. 25
-1812 Feb. 13  1813 Feb. 1   1814 Jan. 21  1815 Feb. 9   1816 Jan. 29  1817 Feb. 16
-1818 Feb. 5   1819 Jan. 26  1820 Feb. 14  1821 Feb. 3   1822 Jan. 23  1823 Feb. 11
-1824 Jan. 31  1825 Feb. 18  1826 Feb. 7   1827 Jan. 27  1828 Feb. 15  1829 Feb. 4
-1830 Jan. 25  1831 Feb. 13  1832 Feb. 2   1833 Feb. 20  1834 Feb. 9   1835 Jan. 29
-1836 Feb. 17  1837 Feb. 5   1838 Jan. 26  1839 Feb. 14  1840 Feb. 3   1841 Jan. 23
-1842 Feb. 10  1843 Jan. 30  1844 Feb. 18  1845 Feb. 7   1846 Jan. 27  1847 Feb. 15
-1848 Feb. 5   1849 Jan. 24  1850 Feb. 12  1851 Feb. 1   1852 Feb. 20  1853 Feb. 8
-1854 Jan. 29  1855 Feb. 17  1856 Feb. 6   1857 Jan. 26  1858 Feb. 14  1859 Feb. 3
-1860 Jan. 23  1861 Feb. 10  1862 Jan. 30  1863 Feb. 18  1864 Feb. 8   1865 Jan. 27
-1866 Feb. 15  1867 Feb. 5   1868 Jan. 25  1869 Feb. 11  1870 Jan. 31  1871 Feb. 19
-1872 Feb. 9   1873 Jan. 29  1874 Feb. 17  1875 Feb. 6   1876 Jan. 26  1877 Feb. 13
-1878 Feb. 2   1879 Jan. 22  1880 Feb. 10  1881 Jan. 30  1882 Feb. 18  1883 Feb. 8
-1884 Jan. 28  1885 Feb. 15  1886 Feb. 4   1887 Jan. 24  1888 Feb. 12  1889 Jan. 31
-1890 Jan. 21  1891 Feb. 9   1892 Jan. 30  1893 Feb. 17  1894 Feb. 6   1895 Jan. 26
-1896 Feb. 13  1897 Feb. 2   1898 Jan. 22  1899 Feb. 10  1900 Jan. 31  1901 Feb. 19
-1902 Feb. 8   1903 Jan. 29  1904 Feb. 16  1905 Feb. 4   1906 Jan. 25  1907 Feb. 13
-1908 Feb. 2   1909 Jan. 22  1910 Feb. 10  1911 Jan. 30  1912 Feb. 18  1913 Feb. 6
-1914 Jan. 26  1915 Feb. 14  1916 Feb. 3   1917 Jan. 23  1918 Feb. 11  1919 Feb. 1
-1920 Feb. 20  1921 Feb. 8   1922 Jan. 28  1923 Feb. 16  1924 Feb. 5   1925 Jan. 24
-1926 Feb. 13  1927 Feb. 2   1928 Jan. 23  1929 Feb. 10  1930 Jan. 30  1931 Feb. 17
-1932 Feb. 6   1933 Jan. 26  1934 Feb. 14  1935 Feb. 4   1936 Jan. 24  1937 Feb. 11
-1938 Jan. 31  1939 Feb. 19  1940 Feb. 8   1941 Jan. 27  1942 Feb. 15  1943 Feb. 5
-1944 Jan. 25  1945 Feb. 13  1946 Feb. 2   1947 Jan. 22  1948 Feb. 10  1949 Jan. 29
-1950 Feb. 17  1951 Feb. 6   1952 Jan. 27  1953 Feb. 14  1954 Feb. 3   1955 Jan. 24
-1956 Feb. 12  1957 Jan. 31  1958 Feb. 18  1959 Feb. 8   1960 Jan. 28  1961 Feb. 15
-1962 Feb. 5   1963 Jan. 25  1964 Feb. 13  1965 Feb. 2   1966 Jan. 21  1967 Feb. 9
-1968 Jan. 30  1969 Feb. 17  1970 Feb. 6   1971 Jan. 27  1972 Feb. 15  1973 Feb. 3
-1974 Jan. 23  1975 Feb. 11  1976 Jan. 31  1977 Feb. 18  1978 Feb. 7   1979 Jan. 28
-1980 Feb. 16  1981 Feb. 5   1982 Jan. 25  1983 Feb. 13  1984 Feb. 2   1985 Feb. 20
-1986 Feb. 9   1987 Jan. 29  1988 Feb. 17  1989 Feb. 6   1990 Jan. 27  1991 Feb. 15
-1992 Feb. 4   1993 Jan. 23  1994 Feb. 10  1995 Jan. 31  1996 Feb. 19  1997 Feb. 7
-1998 Jan. 28  1999 Feb. 16  2000 Feb. 5   2001 Jan. 24  2002 Feb. 12  2003 Feb. 1
-2004 Jan. 22  2005 Feb. 9   2006 Jan. 29  2007 Feb. 18  2008 Feb. 7   2009 Jan. 26
-2010 Feb. 14  2011 Feb. 3   2012 Jan. 23  2013 Feb. 10  2014 Jan. 31  2015 Feb. 19
-2016 Feb. 8   2017 Jan. 28  2018 Feb. 16  2019 Feb. 5   2020 Jan. 25  2021 Feb. 12
-2022 Feb. 1   2023 Jan. 22  2024 Feb. 10  2025 Jan. 29  2026 Feb. 17  2027 Feb. 6
-2028 Jan. 26  2029 Feb. 13  2030 Feb. 3   2031 Jan. 23  2032 Feb. 11  2033 Jan. 31
-2034 Feb. 19  2035 Feb. 8   2036 Jan. 28  2037 Feb. 15  2038 Feb. 4   2039 Jan. 24
-2040 Feb. 12  2041 Feb. 1   2042 Jan. 22  2043 Feb. 10  2044 Jan. 30  2045 Feb. 17
-2046 Feb. 6   2047 Jan. 26  2048 Feb. 14  2049 Feb. 2   2050 Jan. 23  2051 Feb. 11
-2052 Feb. 1   2053 Feb. 19  2054 Feb. 8   2055 Jan. 28  2056 Feb. 15  2057 Feb. 4
-2058 Jan. 24  2059 Feb. 12  2060 Feb. 2   2061 Jan. 21  2062 Feb. 9   2063 Jan. 29
-2064 Feb. 17  2065 Feb. 5   2066 Jan. 26  2067 Feb. 14  2068 Feb. 3   2069 Jan. 23
-2070 Feb. 11  2071 Jan. 31  2072 Feb. 19  2073 Feb. 7   2074 Jan. 27  2075 Feb. 15
-2076 Feb. 5   2077 Jan. 24  2078 Feb. 12  2079 Feb. 2   2080 Jan. 22  2081 Feb. 9
-2082 Jan. 29  2083 Feb. 17  2084 Feb. 6   2085 Jan. 26  2086 Feb. 14  2087 Feb. 3
-2088 Jan. 24  2089 Feb. 10  2090 Jan. 30  2091 Feb. 18  2092 Feb. 7   2093 Jan. 27
-2094 Feb. 15  2095 Feb. 5   2096 Jan. 25  2097 Feb. 12  2098 Feb. 1   2099 Jan. 21
-2100 Feb. 9
-`.trim();
-
-const MONTHS = {
-  "Jan.": 1,
-  "Feb.": 2
-};
-
-function buildLnyMap() {
-  const map = new Map();
-  const re = /(\d{4})\s+(Jan\.|Feb\.)\s+(\d{1,2})/g;
-  let m;
-  while ((m = re.exec(LNY_RAW)) !== null) {
-    const y = Number(m[1]);
-    const mo = MONTHS[m[2]];
-    const d = Number(m[3]);
-    map.set(y, { y, m: mo, d });
-  }
-  return map;
-}
-const LNY = buildLnyMap();
-
-/* =========================
-   2) Zodiak: djur + “sort”
-   Sexagenary cycle: stem + branch
-   (year - 4) mod 10/12 ger stem/branch index med 1984 = Jia-Zi (Rat)
-   ========================= */
-
-const ANIMALS = [
-  "Råtta", "Oxe", "Tiger", "Kanin", "Drake", "Orm",
-  "Häst", "Get", "Apa", "Tupp", "Hund", "Gris"
-];
-
-const BRANCH_PINYIN = [
-  "Zi", "Chou", "Yin", "Mao", "Chen", "Si", "Wu", "Wei", "Shen", "You", "Xu", "Hai"
-];
-
-const STEMS = [
-  { p:"Jia",  yinYang:"Yang", element:"Trä"  },
-  { p:"Yi",   yinYang:"Yin",  element:"Trä"  },
-  { p:"Bing", yinYang:"Yang", element:"Eld"  },
-  { p:"Ding", yinYang:"Yin",  element:"Eld"  },
-  { p:"Wu",   yinYang:"Yang", element:"Jord" },
-  { p:"Ji",   yinYang:"Yin",  element:"Jord" },
-  { p:"Geng", yinYang:"Yang", element:"Metall" },
-  { p:"Xin",  yinYang:"Yin",  element:"Metall" },
-  { p:"Ren",  yinYang:"Yang", element:"Vatten" },
-  { p:"Gui",  yinYang:"Yin",  element:"Vatten" }
-];
-
-const MEANING_ANIMAL = {
-  "Råtta": "Snabb, opportunistisk, social. Bra på att hitta vägar runt hinder.",
-  "Oxe": "Stabil, uthållig, metodisk. Bygger resultat över tid.",
-  "Tiger": "Modig, driven, självständig. Tar initiativ och gillar frihet.",
-  "Kanin": "Diplomatisk, mjuk, omtänksam. Undviker onödiga konflikter.",
-  "Drake": "Karismatisk, ambitiös, energisk. Siktar högt och tar plats.",
-  "Orm": "Analytisk, intuitiv, strategisk. Tänker innan den agerar.",
-  "Häst": "Fri, snabb, social. Trivs med tempo och rörelse.",
-  "Get": "Kreativ, lojal, känslig. Stark i samarbete och estetik.",
-  "Apa": "Smart, lekfull, uppfinningsrik. Löser problem kreativt.",
-  "Tupp": "Tydlig, strukturerad, rak. Ser detaljer och gillar ordning.",
-  "Hund": "Lojal, rättvis, beskyddande. Värderar förtroende.",
-  "Gris": "Generös, varm, jordnära. Gillar trygghet och livskvalitet."
-};
-
-const MEANING_ELEMENT = {
-  "Trä": "Tillväxt, utveckling, flexibilitet. Fokus på att bygga och förbättra.",
-  "Eld": "Energi, passion, synlighet. Fokus på driv och momentum.",
-  "Jord": "Stabilitet, realism, förvaltning. Fokus på struktur och helhet.",
-  "Metall": "Precision, disciplin, kvalitet. Fokus på tydlighet och standard.",
-  "Vatten": "Anpassning, flöde, intuition. Fokus på att hitta smartaste vägen."
-};
-
-const MEANING_YY = {
-  "Yang": "Utåtriktad, aktiv, startar saker.",
-  "Yin": "Inåtriktad, mottaglig, förfinar och stabiliserar."
-};
-
-function pad2(n){ return String(n).padStart(2,"0"); }
-
-function toISO(y,m,d){ return `${y}-${pad2(m)}-${pad2(d)}`; }
-
-function parseISODate(s){
-  // Input: "YYYY-MM-DD" (från <input type=date>)
-  const [y,m,d] = s.split("-").map(Number);
-  return { y, m, d, date: new Date(Date.UTC(y, m-1, d)) };
-}
-
-function getLunarYearForBirthdate(birth){
-  const lny = LNY.get(birth.y);
-  if(!lny) return { ok:false, reason:`Saknar Lunar New Year-datum för år ${birth.y} (stöder 1800–2100).` };
-
-  const lnyDate = new Date(Date.UTC(lny.y, lny.m-1, lny.d));
-  // Om född före Lunar New Year => tillhör föregående zodiakår
-  const lunarYear = (birth.date < lnyDate) ? (birth.y - 1) : birth.y;
-
-  // Lunar New Year att visa = för birth.y (gränsdatum), men zodiakår kan bli y-1
-  return { ok:true, lunarYear, lnyISO: toISO(lny.y, lny.m, lny.d) };
-}
-
-function getZodiac(lunarYear){
-  const stemIndex = mod(lunarYear - 4, 10);
-  const branchIndex = mod(lunarYear - 4, 12);
-
-  const stem = STEMS[stemIndex];
-  const animal = ANIMALS[branchIndex];
-  const branch = BRANCH_PINYIN[branchIndex];
-
-  const sort = `${stem.yinYang} ${stem.element} ${animal}`;
-  const ganzhi = `${stem.p}-${branch}`;
-
-  return { lunarYear, stemIndex, branchIndex, stem, animal, branch, sort, ganzhi };
-}
-function mod(a,b){ return ((a % b) + b) % b; }
-
-/* =========================
-   3) UI
-   ========================= */
-
-const $ = (id) => document.getElementById(id);
-
-function setText(id, text){ $(id).textContent = text; }
-
-function renderResult(birthISO){
-  if(!birthISO){
-    setText("headline","Resultat – fyll i datum");
-    setText("animalOut","—");
-    setText("typeOut","—");
-    setText("yearOut","—");
-    setText("cnyOut","—");
-    setText("meaningAnimal","—");
-    setText("meaningElement","—");
-    setText("meaningYinYang","—");
-    setText("noteOut","—");
-    return;
+  function setPill(activeId){
+    pills.forEach(p => p.setAttribute('aria-pressed', p.id === activeId ? 'true' : 'false'));
   }
 
-  const birth = parseISODate(birthISO);
-  const ly = getLunarYearForBirthdate(birth);
-
-  if(!ly.ok){
-    setText("headline","Resultat – " + ly.reason);
-    setText("noteOut", ly.reason);
-    return;
+  function matchesFilter(card, filter){
+    if(filter === 'all') return true;
+    const tags = (card.dataset.tags || '');
+    if(filter === 'turn')   return /turn|start|glid|turordning/i.test(tags);
+    if(filter === 'score')  return /score|poäng|pengar|skatt|fri parkering|chans|järnväg/i.test(tags);
+    if(filter === 'squares')return /squares|rutor|egendom|lyxskatt|fängelse|järnväg|chans/i.test(tags);
+    return true;
   }
 
-  const z = getZodiac(ly.lunarYear);
+  function apply(){
+    const filter = document.querySelector('.pill[aria-pressed="true"]').dataset.filter;
+    const term = q.value.trim().toLowerCase();
 
-  setText("headline", `Resultat – ${birthISO}`);
-  setText("animalOut", `${z.animal} (${z.ganzhi})`);
-  setText("typeOut", z.sort);
-  setText("yearOut", String(z.lunarYear));
-  setText("cnyOut", ly.lnyISO);
+    let shown = 0;
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      const okFilter = matchesFilter(card, filter);
+      const okSearch = term === '' || text.includes(term);
+      const show = okFilter && okSearch;
+      card.style.display = show ? '' : 'none';
+      if(show) shown++;
+    });
+    status.textContent = shown + " sektioner visas";
+  }
 
-  setText("meaningAnimal", MEANING_ANIMAL[z.animal] || "—");
-  setText("meaningElement", MEANING_ELEMENT[z.stem.element] || "—");
-  setText("meaningYinYang", MEANING_YY[z.stem.yinYang] || "—");
+  // Accordion
+  cards.forEach(card => {
+    const hd = card.querySelector('.hd');
+    function toggle(){ card.classList.toggle('open'); }
+    hd.addEventListener('click', toggle);
+    hd.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
 
-  const note =
-    (ly.lunarYear !== birth.y)
-    ? `Du är född före Lunar New Year ${birth.y}. Därför räknas ditt zodiakår som ${ly.lunarYear} (föregående år).`
-    : `Du är född på/efter Lunar New Year ${birth.y}. Därför räknas ditt zodiakår som ${ly.lunarYear}.`;
+  // Pills
+  pills.forEach(p => p.addEventListener('click', () => { setPill(p.id); apply(); }));
 
-  setText("noteOut", note);
-}
+  // Search
+  q.addEventListener('input', apply);
 
-$("calcBtn").addEventListener("click", () => renderResult($("dob").value));
-$("dob").addEventListener("change", () => renderResult($("dob").value));
-$("todayBtn").addEventListener("click", () => {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = pad2(now.getMonth()+1);
-  const d = pad2(now.getDate());
-  $("dob").value = `${y}-${m}-${d}`;
-  renderResult($("dob").value);
-});
+  // Open/Close all
+  document.getElementById('openAll').addEventListener('click', () => { cards.forEach(c => c.classList.add('open')); });
+  document.getElementById('closeAll').addEventListener('click', () => { cards.forEach(c => c.classList.remove('open')); });
 
-// Startläge
-renderResult(null);
+  // Init
+  apply();
 </script>
 </body>
 </html>
