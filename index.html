@@ -1,312 +1,811 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Regelapp – snabbguide</title>
-  <style>
-    :root { --bg:#0b0f14; --card:#121a23; --card2:#0f1620; --txt:#e8eef6; --muted:#a9b6c6; --line:#243142; --accent:#5aa6ff; --bad:#ff5a7a; --good:#49d17d; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0f14,#070a0f);color:var(--txt)}
-    header{position:sticky;top:0;background:rgba(11,15,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10}
-    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 18px}
-    h1{font-size:18px;margin:0 0 8px}
-    .sub{color:var(--muted);font-size:13px;margin:0 0 10px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .pill{border:1px solid var(--line);background:rgba(18,26,35,.7);color:var(--txt);padding:10px 12px;border-radius:12px;font-size:13px;cursor:pointer;user-select:none}
-    .pill[aria-pressed="true"]{border-color:rgba(90,166,255,.7);box-shadow:0 0 0 3px rgba(90,166,255,.15)}
-    .search{flex:1;min-width:190px}
-    input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(18,26,35,.7);color:var(--txt);outline:none}
-    input::placeholder{color:#7f92a8}
-    main{max-width:980px;margin:0 auto;padding:14px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
-    .card{grid-column:span 12;background:rgba(18,26,35,.75);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-    .card .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px;background:rgba(15,22,32,.55);cursor:pointer}
-    .card h2{font-size:15px;margin:0}
-    .tag{font-size:12px;color:var(--muted)}
-    .body{display:none;padding:14px;border-top:1px solid var(--line);line-height:1.35}
-    .card.open .body{display:block}
-    .k{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;background:rgba(18,26,35,.55);font-size:12px;color:var(--muted)}
-    .hr{height:1px;background:var(--line);margin:12px 0}
-    .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .tile{background:rgba(15,22,32,.55);border:1px solid var(--line);border-radius:14px;padding:12px}
-    .tile b{display:block;margin-bottom:6px}
-    .note{color:var(--muted);font-size:13px}
-    .ok{color:var(--good)}
-    .bad{color:var(--bad)}
-    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .btn{border:1px solid var(--line);background:rgba(18,26,35,.75);color:var(--txt);padding:10px 12px;border-radius:12px;cursor:pointer}
-    .btn.primary{border-color:rgba(90,166,255,.7);background:rgba(90,166,255,.15)}
-    .small{font-size:12px;color:var(--muted)}
-    @media (min-width:760px){
-      .card.half{grid-column:span 6}
-      .tiles{grid-template-columns:repeat(3,1fr)}
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>DPS Assessment</title>
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --primary:#2563eb;
+    --primary-weak:#dbeafe;
+    --danger:#b91c1c;
+    --ok:#047857;
+    --shadow: 0 6px 18px rgba(17,24,39,.08);
+    --radius:14px;
+    --tap:44px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+  }
+  a{color:var(--primary); text-decoration:none}
+  .app{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 18px);
+  }
+  .topbar{
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: linear-gradient(to bottom, rgba(246,247,251,.98), rgba(246,247,251,.92));
+    backdrop-filter: blur(6px);
+    padding: 10px 0 10px;
+    border-bottom: 1px solid rgba(229,231,235,.9);
+  }
+  .topbar-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .title{
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:.2px;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 0 2px 10px rgba(17,24,39,.06);
+    white-space:nowrap;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .dot{
+    width:10px; height:10px; border-radius:50%;
+    background: var(--ok);
+  }
+  .dot.warn{ background: var(--danger); }
+  .content{ padding-top: 14px; }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .card-h{
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--border);
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .card-h h2{
+    margin:0;
+    font-size:16px;
+    font-weight:800;
+  }
+  .card-h p{
+    margin:6px 0 0;
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.35;
+  }
+  .card-b{ padding: 14px; }
+
+  .btn{
+    min-height: var(--tap);
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    font-weight: 700;
+    font-size: 14px;
+    width: 100%;
+    text-align:left;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover{ border-color:#cbd5e1; }
+  .btn-primary{
+    background: var(--primary);
+    color: #fff;
+    border-color: rgba(37,99,235,.55);
+  }
+  .btn-ghost{
+    background: transparent;
+    border-color: var(--border);
+  }
+  .btn-small{
+    min-height: 40px;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    text-align:center;
+    width:auto;
+  }
+  .btn-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .btn-row .btn-small{ flex: 1 1 140px; }
+
+  .badge{
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--primary-weak);
+    color: var(--primary);
+    border: 1px solid rgba(37,99,235,.18);
+    white-space:nowrap;
+  }
+  .section{
+    margin-top: 12px;
+  }
+  details{
+    border:1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(17,24,39,.05);
+    overflow:hidden;
+  }
+  summary{
+    list-style:none;
+    cursor:pointer;
+    padding: 12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  summary::-webkit-details-marker{display:none}
+  .summary-sub{
+    margin-left:auto;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .questions{
+    border-top: 1px solid var(--border);
+    padding: 10px 12px 12px;
+  }
+  .q{
+    padding: 10px 8px;
+    border-bottom: 1px dashed rgba(229,231,235,.9);
+  }
+  .q:last-child{ border-bottom:none; }
+  .qtext{
+    font-size: 13px;
+    line-height:1.35;
+    font-weight: 650;
+    margin:0 0 10px;
+  }
+  .scale{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap:8px;
+  }
+  .opt{
+    min-height: 38px;
+    border-radius: 10px;
+    border:1px solid var(--border);
+    background:#fff;
+    font-weight: 900;
+    font-size: 13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    user-select:none;
+  }
+  .opt input{ display:none; }
+  .opt.sel{
+    border-color: rgba(37,99,235,.55);
+    background: var(--primary-weak);
+    color: var(--primary);
+  }
+  .hint{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.35;
+  }
+  .footer-actions{
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(246,247,251,.98), rgba(246,247,251,.88));
+    backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(229,231,235,.9);
+    padding: 10px 0 calc(env(safe-area-inset-bottom) + 6px);
+    margin-top: 14px;
+  }
+  .footer-actions .row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .footer-actions .row button{ flex: 1 1 140px; }
+  .toast{
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + 18px);
+    transform: translateX(-50%);
+    background: #111827;
+    color:#fff;
+    padding: 10px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity .18s ease;
+    max-width: 92vw;
+    text-align:center;
+  }
+  .toast.show{ opacity: 1; }
+  .bar{
+    height: 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    border: 1px solid var(--border);
+    overflow:hidden;
+  }
+  .bar > div{
+    height:100%;
+    width:0%;
+    background: var(--primary);
+  }
+  .result-row{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:8px;
+    padding: 10px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .result-row:last-child{ border-bottom:none; }
+  .result-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .muted{ color:var(--muted); font-size:12px; font-weight:800; }
+  .mono{ font-variant-numeric: tabular-nums; }
+  @media print{
+    .topbar, .footer-actions, .btn-row, .pill, .toast { display:none !important; }
+    body{ background:#fff; }
+    .app{ max-width: none; padding: 0; }
+    .card{ box-shadow:none; }
+  }
+</style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <h1>Regelapp – snabbguide</h1>
-    <p class="sub">Tryck på sektioner. Sök funkar på allt. Anpassad för 2 spelare + 5 omgångar.</p>
-    <div class="row">
-      <div class="search"><input id="q" placeholder="Sök: chans, järnväg, fängelse, poäng, fri parkering..." /></div>
-      <button class="pill" id="modeAll" aria-pressed="true" data-filter="all">Allt</button>
-      <button class="pill" id="modeTurn" aria-pressed="false" data-filter="turn">Tur (glid)</button>
-      <button class="pill" id="modeScore" aria-pressed="false" data-filter="score">Poäng</button>
-      <button class="pill" id="modeSquares" aria-pressed="false" data-filter="squares">Rutor</button>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="title">DPS Assessment</div>
+      <div class="pill" id="saveStatePill">
+        <span class="dot" id="saveDot"></span>
+        <span id="saveStateText">All changes saved</span>
+      </div>
     </div>
   </div>
-</header>
 
-<main>
-  <div class="grid" id="cards">
+  <div class="content" id="view"></div>
 
-    <section class="card open half" data-tags="turn start omgång turordning">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Starta omgången</h2>
-          <div class="tag">Turordning · 2 spelare</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <div class="tiles">
-          <div class="tile">
-            <b>1) Turordning</b>
-            Titta på <b>referenskortet</b>. Den som står överst börjar.
-          </div>
-          <div class="tile">
-            <b>2) Varje spelare</b>
-            Spelar sina <b>4 pjäser</b> (en i taget).
-          </div>
-          <div class="tile">
-            <b>3) Sen poäng</b>
-            När båda glidit alla pjäser: <b>poängfas i ordning</b>.
-          </div>
-        </div>
-        <div class="hr"></div>
-        <div class="note"><b>5 omgångar:</b> spela exakt 5, sen räkna slutpengar. Mest vinner.</div>
-      </div>
-    </section>
-
-    <section class="card open half" data-tags="turn glid sikta släpp">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Din tur (glid-regler)</h2>
-          <div class="tag">Gör detta per pjäs</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <div class="tiles">
-          <div class="tile">
-            <b>1) Start</b>
-            Ställ pjäsen <b>bakom GÅ</b>.
-          </div>
-          <div class="tile">
-            <b>2) Glid</b>
-            Sikta och släpp. <span class="bad"><b>Ingen</b> justering efter släpp.</span>
-          </div>
-          <div class="tile">
-            <b>3) Knuff</b>
-            Att knuffa andra pjäser är <span class="ok"><b>tillåtet</b></span>.
-          </div>
-        </div>
-        <div class="hr"></div>
-        <div class="note"><b>Om pjäsen hamnar mellan rutor:</b> räkna den som rutan där största delen av pjäsen ligger.</div>
-      </div>
-    </section>
-
-    <section class="card" data-tags="score poäng ordning chans järnväg pengar skatt fri parkering">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Poängfas (måste ske i ordning)</h2>
-          <div class="tag">Efter att båda glidit alla 4 pjäser</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <div class="tiles">
-          <div class="tile">
-            <b>Steg 1: Chans</b>
-            Bara pjäser på <b>Chans</b>. Glid igen. Om den hamnar på Chans igen: <b>stanna</b>.
-          </div>
-          <div class="tile">
-            <b>Steg 2: Järnvägsstation</b>
-            Flytta pjäsen till valfri <b>egendom</b> (inte till Chans/Fri parkering/Fängelse).
-          </div>
-          <div class="tile">
-            <b>Steg 3: Pengar & skatt</b>
-            Ta betalt för egendomar. Bonus för färggrupp. Dubbelt om hus. Lyxskatt → betala till Fri parkering.
-          </div>
-          <div class="tile">
-            <b>Steg 4: Fri parkering</b>
-            Flest pjäser där tar potten. Lika → dela.
-          </div>
-        </div>
-        <div class="hr"></div>
-        <div class="note"><b>Konflikt (båda på samma egendom):</b> referenskortet avgör (den som står högst vinner).</div>
-      </div>
-    </section>
-
-    <section class="card" data-tags="squares rutor gå chans järnväg fängelse lyxskatt fri parkering egendomar">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Vad betyder rutorna?</h2>
-          <div class="tag">Tryck och läs snabbt</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <div class="tiles">
-          <div class="tile">
-            <b>GÅ</b>
-            Startplats för varje glid.
-          </div>
-          <div class="tile">
-            <b>Egendom</b>
-            Ger pengar i poängfasen. Färggrupp ger bonus.
-          </div>
-          <div class="tile">
-            <b>Chans</b>
-            Du får glida igen i poängfasens steg 1.
-          </div>
-          <div class="tile">
-            <b>Järnvägsstation</b>
-            Du flyttar till valfri egendom i poängfasens steg 2.
-          </div>
-          <div class="tile">
-            <b>Lyxskatt</b>
-            Betala (t.ex. 100) till Fri parkering.
-          </div>
-          <div class="tile">
-            <b>Fri parkering</b>
-            Pengapotten. Flest pjäser tar allt.
-          </div>
-          <div class="tile">
-            <b>Fängelse</b>
-            Om du hamnar där: betala 100 till Fri parkering och glid igen – eller sitt kvar till omgångens slut.
-          </div>
-          <div class="tile">
-            <b>Hus</b>
-            Om en egendom har hus: ger <b>dubbla</b> pengar.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card half" data-tags="taktik strategi bästa rutor vinn omgången">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Taktik (5 omgångar)</h2>
-          <div class="tag">Enkelt upplägg</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <div class="tiles">
-          <div class="tile">
-            <b>2 pjäser</b>
-            Sikta på samma <b>färggrupp</b> (bonus är starkt).
-          </div>
-          <div class="tile">
-            <b>1 pjäs</b>
-            Sikta på <b>Järnvägsstation</b> (kontroll).
-          </div>
-          <div class="tile">
-            <b>1 pjäs</b>
-            Använd för <b>sabotage</b> (knuffa bort/knuffa till skatt/fängelse).
-          </div>
-        </div>
-        <div class="hr"></div>
-        <div class="note"><b>Sista omgången:</b> jaga Fri parkering + stoppa motståndaren (blockera/sabla).</div>
-      </div>
-    </section>
-
-    <section class="card half" data-tags="checklista snabbstart">
-      <div class="hd" role="button" tabindex="0">
-        <div>
-          <h2>Snabbcheck (innan ni börjar)</h2>
-          <div class="tag">30 sekunder</div>
-        </div>
-        <span class="k">Tryck</span>
-      </div>
-      <div class="body">
-        <ul>
-          <li>Bestäm: <b>5 omgångar</b>.</li>
-          <li>Turordning enligt <b>referenskort</b>.</li>
-          <li>Varje tur: glid <b>4 pjäser</b> → sen poängfas.</li>
-          <li>Poängfas: <b>Chans → Järnväg → Pengar/Skatt → Fri parkering</b>.</li>
-        </ul>
-        <div class="btnrow">
-          <button class="btn primary" id="openAll">Öppna alla sektioner</button>
-          <button class="btn" id="closeAll">Stäng alla sektioner</button>
-          <span class="small" id="status"></span>
-        </div>
-      </div>
-    </section>
-
-  </div>
-</main>
+  <div class="toast" id="toast">Saved</div>
+</div>
 
 <script>
-  const cards = [...document.querySelectorAll('.card')];
-  const q = document.getElementById('q');
-  const pills = [...document.querySelectorAll('.pill')];
-  const status = document.getElementById('status');
+const DPS = {
+  sheets: [
+    {
+      id: "lean_organisation",
+      name: "Lean Organisation",
+      sections: [
+        { title: "LEAN BASICS", questions: [
+          "Has the area been trained in the DPS approach and foundational Lean principles?",
+          "Can the Team Leader identify and explain the 8 wastes in the area?",
+          "Is visualization according to DPS standard (correct, updated, clear)?",
+          "Is a structured 5S system in place, audited, visualized, and followed up?",
+          "Is the Team Leader trained in process observation and using it regularly?"
+        ]},
+        { title: "LEADERSHIP & MANAGEMENT", questions: [
+          "Is Leader Standard Work defined and documented?",
+          "Is Leader Standard Work actively used in daily routines?",
+          "Are roles, responsibilities, and escalation paths clearly defined?",
+          "Is a tiered meeting structure implemented and followed?",
+          "Are actions from meetings tracked and closed?"
+        ]},
+        { title: "SHOPFLOOR MANAGEMENT", questions: [
+          "Are Shopfloor Boards implemented according to DPS standard?",
+          "Are KPIs visual, relevant, and updated daily?",
+          "Are deviations clearly highlighted on the board?",
+          "Are countermeasures defined for deviations?",
+          "Is the board actively used for daily management?"
+        ]},
+        { title: "PEOPLE & COMPETENCE", questions: [
+          "Is a competence/skills matrix available and updated?",
+          "Are skill gaps identified and addressed?",
+          "Is onboarding structured and standardized?",
+          "Is cross-training actively used?",
+          "Is leadership capacity protected for leadership tasks?"
+        ]},
+        { title: "CONTINUOUS IMPROVEMENT CULTURE", questions: [
+          "Is there a visible and active improvement system?",
+          "Are improvement ideas captured and followed up?",
+          "Are operators involved in improvements?",
+          "Are improvements standardized after implementation?",
+          "Is Lean embedded in daily work?"
+        ]}
+      ]
+    },
+    {
+      id: "customer_orientation",
+      name: "Customer Orientation",
+      sections: [
+        { title: "CUSTOMER REQUIREMENTS", questions: [
+          "Are customer requirements clearly defined and documented?",
+          "Are customer requirements translated into internal standards?",
+          "Are quality requirements understood in production?",
+          "Are delivery requirements clearly communicated?",
+          "Are changes in customer requirements handled systematically?"
+        ]},
+        { title: "CUSTOMER PERFORMANCE", questions: [
+          "Are delivery performance KPIs defined and tracked?",
+          "Are quality KPIs linked to customer expectations?",
+          "Are customer complaints analyzed systematically?",
+          "Are corrective actions implemented and verified?",
+          "Is customer feedback used for improvement?"
+        ]}
+      ]
+    },
+    {
+      id: "improvement",
+      name: "Improvement",
+      sections: [
+        { title: "IMPROVEMENT SYSTEM", questions: [
+          "Is there a formal continuous improvement process?",
+          "Are roles and responsibilities for improvement defined?",
+          "Is there a prioritized improvement backlog?",
+          "Are improvements aligned with business priorities?",
+          "Is management actively supporting improvements?"
+        ]},
+        { title: "PROBLEM SOLVING", questions: [
+          "Is structured problem solving used (e.g., A3)?",
+          "Are root causes identified before actions?",
+          "Are countermeasures verified for effect?",
+          "Are problems solved at the source?",
+          "Are lessons learned shared?"
+        ]},
+        { title: "FOLLOW-UP & STANDARDIZATION", questions: [
+          "Are improvements tracked over time?",
+          "Are KPIs used to verify impact?",
+          "Are failed improvements reviewed?",
+          "Are standards updated after changes?",
+          "Is the improvement system stable over time?"
+        ]}
+      ]
+    },
+    {
+      id: "lean_production",
+      name: "Lean Production",
+      sections: [
+        { title: "FLOW", questions: [
+          "Is the area designed according to Lean line design principles?",
+          "Are value-adding work and line feeding separated?",
+          "Are workstations designed to support value creation?",
+          "Is the Best Point principle applied?",
+          "Is line balancing actively managed?"
+        ]},
+        { title: "JUST-IN-TIME", questions: [
+          "Is a systematic line-feeding process implemented?",
+          "Is line-feeder utilization measured and optimized?",
+          "Is a multi-bin replenishment system implemented?",
+          "Is FIFO applied for all components?",
+          "Is a Milk-run system defined and followed?"
+        ]},
+        { title: "PULL", questions: [
+          "Is production triggered by actual demand?",
+          "Are Kanban rules clearly defined and visualized?",
+          "Are supermarkets correctly dimensioned?",
+          "Are pull signals reliable and followed?",
+          "Are deviations from pull addressed?"
+        ]},
+        { title: "STANDARDIZED WORK", questions: [
+          "Is standardized work defined for all operations?",
+          "Is standardized work visible at the workplace?",
+          "Are operators trained in the standard?",
+          "Are deviations from standard visible?",
+          "Is standardized work continuously improved?"
+        ]},
+        { title: "QUALITY IN PROCESS", questions: [
+          "Is quality built into the process?",
+          "Are defects detected immediately?",
+          "Is rework minimized?",
+          "Are Poka-Yoke solutions applied?",
+          "Are root causes addressed systematically?"
+        ]}
+      ]
+    },
+    {
+      id: "stability",
+      name: "Stability",
+      sections: [
+        { title: "BASIC STABILITY", questions: [
+          "Are basic process standards defined?",
+          "Are standards followed in daily work?",
+          "Are deviations immediately visible?",
+          "Are deviations acted upon quickly?",
+          "Is process output predictable?"
+        ]},
+        { title: "5S & WORKPLACE ORGANIZATION", questions: [
+          "Is 5S implemented according to standard?",
+          "Is 5S audited regularly?",
+          "Are workplaces clean and organized?",
+          "Is visual order maintained?",
+          "Is 5S sustained over time?"
+        ]},
+        { title: "PEOPLE & INFORMATION FLOW", questions: [
+          "Is staffing stable and planned?",
+          "Is absenteeism managed?",
+          "Are handovers standardized?",
+          "Is information transfer reliable?",
+          "Is stability reviewed regularly?"
+        ]}
+      ]
+    }
+  ]
+};
 
-  function setPill(activeId){
-    pills.forEach(p => p.setAttribute('aria-pressed', p.id === activeId ? 'true' : 'false'));
+const STORAGE_KEY = "dps_assessment_v1";
+let state = loadState();
+let currentSheetId = null;
+let dirty = false;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return { scores:{}, meta:{ createdAt: new Date().toISOString() } };
+    const parsed = JSON.parse(raw);
+    if(!parsed.scores) parsed.scores = {};
+    if(!parsed.meta) parsed.meta = { createdAt: new Date().toISOString() };
+    return parsed;
+  }catch(e){
+    return { scores:{}, meta:{ createdAt: new Date().toISOString() } };
   }
-
-  function matchesFilter(card, filter){
-    if(filter === 'all') return true;
-    const tags = (card.dataset.tags || '');
-    if(filter === 'turn')   return /turn|start|glid|turordning/i.test(tags);
-    if(filter === 'score')  return /score|poäng|pengar|skatt|fri parkering|chans|järnväg/i.test(tags);
-    if(filter === 'squares')return /squares|rutor|egendom|lyxskatt|fängelse|järnväg|chans/i.test(tags);
-    return true;
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  setDirty(false);
+  toast("Saved");
+}
+function resetState(){
+  if(!confirm("Reset all saved scores? This cannot be undone.")) return;
+  state = { scores:{}, meta:{ createdAt: new Date().toISOString() } };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  setDirty(false);
+  renderHome();
+  toast("Reset");
+}
+function setDirty(v){
+  dirty = v;
+  const dot = document.getElementById("saveDot");
+  const txt = document.getElementById("saveStateText");
+  if(dirty){
+    dot.classList.add("warn");
+    txt.textContent = "Unsaved changes";
+  }else{
+    dot.classList.remove("warn");
+    txt.textContent = "All changes saved";
   }
+}
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1200);
+}
+window.addEventListener("beforeunload", (e)=>{
+  if(!dirty) return;
+  e.preventDefault();
+  e.returnValue = "";
+});
 
-  function apply(){
-    const filter = document.querySelector('.pill[aria-pressed="true"]').dataset.filter;
-    const term = q.value.trim().toLowerCase();
-
-    let shown = 0;
-    cards.forEach(card => {
-      const text = card.innerText.toLowerCase();
-      const okFilter = matchesFilter(card, filter);
-      const okSearch = term === '' || text.includes(term);
-      const show = okFilter && okSearch;
-      card.style.display = show ? '' : 'none';
-      if(show) shown++;
-    });
-    status.textContent = shown + " sektioner visas";
-  }
-
-  // Accordion
-  cards.forEach(card => {
-    const hd = card.querySelector('.hd');
-    function toggle(){ card.classList.toggle('open'); }
-    hd.addEventListener('click', toggle);
-    hd.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+function getSheetById(id){ return DPS.sheets.find(s=>s.id===id); }
+function qKey(sheetId, sectionIndex, qIndex){ return `${sheetId}__s${sectionIndex}__q${qIndex}`; }
+function setScore(sheetId, sectionIndex, qIndex, value){
+  state.scores[qKey(sheetId, sectionIndex, qIndex)] = value;
+  setDirty(true);
+}
+function getScore(sheetId, sectionIndex, qIndex){
+  const v = state.scores[qKey(sheetId, sectionIndex, qIndex)];
+  return (v===0 || v) ? v : null;
+}
+function sheetStats(sheet){
+  let total=0, count=0, filled=0;
+  sheet.sections.forEach((sec, si)=>{
+    sec.questions.forEach((_, qi)=>{
+      const v = getScore(sheet.id, si, qi);
+      count += 1;
+      if(v===0 || v){ filled += 1; total += v; }
     });
   });
+  const avg = filled ? (total/filled) : 0;
+  return { total, count, filled, avg };
+}
+function overallStats(){
+  let total=0, filled=0, count=0;
+  DPS.sheets.forEach(sh=>{
+    const st = sheetStats(sh);
+    total += st.total; filled += st.filled; count += st.count;
+  });
+  const avg = filled ? (total/filled) : 0;
+  return { total, filled, count, avg };
+}
+function escapeCSV(v){
+  const s = String(v ?? "");
+  if(/[",\\n]/.test(s)) return `"${s.replace(/"/g,'""')}"`;
+  return s;
+}
+function download(filename, text, mime){
+  const blob = new Blob([text], {type: mime || "text/plain"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 500);
+}
+function exportSheetCSV(sheetId){
+  const sh = getSheetById(sheetId);
+  const rows = [];
+  rows.push(["App","DPS Assessment"]);
+  rows.push(["Sheet", sh.name]);
+  rows.push(["ExportedAt", new Date().toISOString()]);
+  rows.push([]);
+  rows.push(["Title","Question","Score(0-4)"]);
+  sh.sections.forEach((sec, si)=>{
+    sec.questions.forEach((q, qi)=>{
+      const score = getScore(sheetId, si, qi);
+      rows.push([sec.title, q, (score===0||score)?score:""]);
+    });
+  });
+  const csv = rows.map(r=>r.map(escapeCSV).join(",")).join("\\n");
+  download(`DPS_Assessment_${sh.name.replace(/\\s+/g,'_')}.csv`, csv, "text/csv");
+}
+function exportAllCSV(){
+  const rows = [];
+  rows.push(["App","DPS Assessment"]);
+  rows.push(["ExportedAt", new Date().toISOString()]);
+  rows.push([]);
+  rows.push(["Sheet","Title","Question","Score(0-4)"]);
+  DPS.sheets.forEach(sh=>{
+    sh.sections.forEach((sec, si)=>{
+      sec.questions.forEach((q, qi)=>{
+        const score = getScore(sh.id, si, qi);
+        rows.push([sh.name, sec.title, q, (score===0||score)?score:""]);
+      });
+    });
+  });
+  const csv = rows.map(r=>r.map(escapeCSV).join(",")).join("\\n");
+  download(`DPS_Assessment_ALL.csv`, csv, "text/csv");
+}
 
-  // Pills
-  pills.forEach(p => p.addEventListener('click', () => { setPill(p.id); apply(); }));
+const view = document.getElementById("view");
 
-  // Search
-  q.addEventListener('input', apply);
+function renderHome(){
+  currentSheetId = null;
+  const overall = overallStats();
+  view.innerHTML = `
+    <div class="grid">
+      <div class="card">
+        <div class="card-h">
+          <div>
+            <h2>Start</h2>
+            <p>Select a sheet. Works offline. Scores are stored on this phone until you export or reset.</p>
+          </div>
+          <div class="badge"><span class="mono">${overall.filled}/${overall.count}</span> answered</div>
+        </div>
+        <div class="card-b">
+          <div class="grid" id="sheetBtns"></div>
+          <div style="height:10px"></div>
+          <div class="btn-row">
+            <button class="btn btn-small btn-primary" onclick="renderResults()">Results</button>
+            <button class="btn btn-small" onclick="exportAllCSV()">Export all (CSV)</button>
+            <button class="btn btn-small btn-ghost" onclick="window.print()">Save as PDF</button>
+            <button class="btn btn-small" onclick="resetState()">Reset</button>
+          </div>
+          <div class="hint">Scoring: 0 = Not in place, 4 = Fully in place. PDF uses your browser print dialog.</div>
+        </div>
+      </div>
+    </div>
+  `;
+  const container = document.getElementById("sheetBtns");
+  DPS.sheets.forEach(sh=>{
+    const st = sheetStats(sh);
+    const pct = Math.round((st.filled/st.count)*100);
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.innerHTML = `<span>${sh.name}</span><span class="badge"><span class="mono">${pct}%</span></span>`;
+    btn.onclick = ()=>renderSheet(sh.id);
+    container.appendChild(btn);
+  });
+  setDirty(false);
+}
 
-  // Open/Close all
-  document.getElementById('openAll').addEventListener('click', () => { cards.forEach(c => c.classList.add('open')); });
-  document.getElementById('closeAll').addEventListener('click', () => { cards.forEach(c => c.classList.remove('open')); });
+function renderSheet(sheetId){
+  currentSheetId = sheetId;
+  const sh = getSheetById(sheetId);
+  const st = sheetStats(sh);
+  const pct = Math.round((st.filled/st.count)*100);
 
-  // Init
-  apply();
+  const sectionsHtml = sh.sections.map((sec, si)=>{
+    const secFilled = sec.questions.reduce((acc,_,qi)=> acc + ((getScore(sheetId,si,qi)===0 || getScore(sheetId,si,qi)) ? 1:0), 0);
+    const secPct = Math.round((secFilled/sec.questions.length)*100);
+    const qsHtml = sec.questions.map((q, qi)=>{
+      const v = getScore(sheetId, si, qi);
+      const name = qKey(sheetId,si,qi);
+      const opts = [0,1,2,3,4].map(n=>{
+        const sel = (v===n);
+        return `
+          <label class="opt ${sel?'sel':''}">
+            <input type="radio" name="${name}" value="${n}" ${sel?'checked':''}
+              onchange="handleScore('${sheetId}',${si},${qi},${n})"/>
+            ${n}
+          </label>`;
+      }).join("");
+      return `
+        <div class="q">
+          <p class="qtext">${q}</p>
+          <div class="scale">${opts}</div>
+        </div>`;
+    }).join("");
+
+    return `
+      <div class="section">
+        <details ${si===0?'open':''}>
+          <summary>
+            <span>${sec.title}</span>
+            <span class="summary-sub"><span class="mono">${secPct}%</span></span>
+          </summary>
+          <div class="questions">${qsHtml}</div>
+        </details>
+      </div>
+    `;
+  }).join("");
+
+  view.innerHTML = `
+    <div class="grid">
+      <div class="card">
+        <div class="card-h">
+          <div>
+            <h2>${sh.name}</h2>
+            <p>Score each question 0–4. Use “Save” before leaving this sheet.</p>
+          </div>
+          <div class="badge"><span class="mono">${pct}%</span></div>
+        </div>
+        <div class="card-b">
+          <div class="btn-row">
+            <button class="btn btn-small" onclick="goHome()">Home</button>
+            <button class="btn btn-small btn-primary" onclick="renderResults()">Results</button>
+            <button class="btn btn-small btn-ghost" onclick="window.print()">Save as PDF</button>
+          </div>
+          ${sectionsHtml}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <div class="row">
+        <button class="btn btn-small btn-primary" onclick="saveState()">Save</button>
+        <button class="btn btn-small" onclick="exportSheetCSV('${sheetId}')">Save (Excel/CSV)</button>
+        <button class="btn btn-small" onclick="goHome()">Close sheet</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderResults(){
+  const overall = overallStats();
+  const rows = DPS.sheets.map(sh=>{
+    const st = sheetStats(sh);
+    const pct = Math.round((st.filled/st.count)*100);
+    const avg = st.filled ? st.avg : 0;
+    const width = Math.round((avg/4)*100);
+    return `
+      <div class="result-row">
+        <div class="result-top">
+          <div style="font-weight:900">${sh.name}</div>
+          <div class="muted"><span class="mono">${st.filled}/${st.count}</span> • Avg <span class="mono">${avg.toFixed(2)}</span></div>
+        </div>
+        <div class="bar"><div style="width:${width}%"></div></div>
+        <div class="muted">Completion: <span class="mono">${pct}%</span> • Score bar: 0–4</div>
+        <button class="btn btn-small" onclick="renderSheet('${sh.id}')">Open</button>
+      </div>
+    `;
+  }).join("");
+
+  const overallWidth = Math.round((overall.avg/4)*100);
+  view.innerHTML = `
+    <div class="grid">
+      <div class="card">
+        <div class="card-h">
+          <div>
+            <h2>Results</h2>
+            <p>Progress and average score per sheet.</p>
+          </div>
+          <div class="badge">Avg <span class="mono">${overall.avg.toFixed(2)}</span>/4</div>
+        </div>
+        <div class="card-b">
+          <div class="result-row">
+            <div class="result-top">
+              <div style="font-weight:900">Overall</div>
+              <div class="muted"><span class="mono">${overall.filled}/${overall.count}</span> answered</div>
+            </div>
+            <div class="bar"><div style="width:${overallWidth}%"></div></div>
+            <div class="muted">Export: use CSV for Excel, or PDF via print.</div>
+          </div>
+
+          ${rows}
+
+          <div style="height:10px"></div>
+          <div class="btn-row">
+            <button class="btn btn-small" onclick="goHome()">Home</button>
+            <button class="btn btn-small btn-primary" onclick="saveState()">Save</button>
+            <button class="btn btn-small" onclick="exportAllCSV()">Export all (CSV)</button>
+            <button class="btn btn-small btn-ghost" onclick="window.print()">Save as PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function goHome(){
+  if(dirty){
+    const ok = confirm("You have unsaved changes. Leave without saving?");
+    if(!ok) return;
+    setDirty(false);
+  }
+  renderHome();
+}
+
+function handleScore(sheetId, sectionIndex, qIndex, val){
+  setScore(sheetId, sectionIndex, qIndex, val);
+  const name = qKey(sheetId, sectionIndex, qIndex);
+  document.querySelectorAll(`input[name="${name}"]`).forEach(inp=>{
+    const lab = inp.closest(".opt");
+    if(!lab) return;
+    lab.classList.toggle("sel", inp.checked);
+  });
+}
+
+renderHome();
 </script>
 </body>
 </html>
